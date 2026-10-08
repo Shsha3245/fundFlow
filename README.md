@@ -1,76 +1,107 @@
-# 🚀 FundFlow — Decentralized Sports Crowdfunding Platform
+# FundFlow
 
-FundFlow, amatör spor kulüpleri, genç yetenekler ve altyapı projeleri için Stellar blockchain & Soroban akıllı kontratları altyapısıyla geliştirilmiş merkeziyetsiz bir bağış ve fonlama platformudur.
+FundFlow, toplulukların ve spor projelerinin fonlama kampanyalarını yayınlamasına ve destek almasına yardımcı olan bir platformdur. Proje; Next.js tabanlı bir arayüz, FastAPI tabanlı bir API ve Soroban akıllı sözleşme çalışma alanı içerir.
 
----
+## Özellikler
 
-## 🏗️ Proje Mimarısı (Repository Structure)
+- Kampanyaları listeleme, arama ve kategoriye göre filtreleme
+- Proje fonlama başvurusu gönderme
+- MetaMask ve Freighter cüzdanlarını bağlama
+- Yönetim panelinden kampanya başvurularını inceleme
+
+## Teknolojiler
+
+- **Arayüz:** Next.js, React, TypeScript, Tailwind CSS
+- **API:** Python, FastAPI, Uvicorn
+- **Veritabanı:** PostgreSQL
+- **Akıllı sözleşme çalışma alanı:** Rust, Soroban SDK
+
+## Proje yapısı
 
 ```text
-myCoin/
-├── backend/                  # FastAPI Web Servisi (Python)
-├── frontend/                 # Next.js Web Arayüzü (React/TypeScript)
-├── soroban-campaign-contract/# Soroban Smart Contract (Rust)
-└── .github/workflows/        # CI/CD Pipeline Yapılandırmaları
-🛠️ Teknolojiler & Stack
-Smart Contracts: Stellar Soroban (Rust SDK)
+.
+├── backend/                   # FastAPI uygulaması ve PostgreSQL erişimi
+│   └── app/
+│       ├── models/            # İstek modelleri
+│       └── routers/           # Kampanya, yönetim ve cüzdan uçları
+├── frontend/                  # Next.js uygulaması
+│   └── src/app/               # Sayfalar ve arayüz bileşenleri
+├── soroban-campaign-contract/ # Soroban Rust çalışma alanı
+│   └── contracts/hello-world/ # Örnek kontrat
+└── .github/workflows/         # GitHub Actions iş akışları
+```
 
-Backend: FastAPI, Python 3.12, Uvicorn
+## Gereksinimler
 
-Database: Supabase PostgreSQL (Session/Transaction Pooler)
+- Node.js 20.9 veya üzeri ve npm
+- Python 3.11 veya üzeri
+- PostgreSQL veritabanı
+- Soroban kontratını geliştirmek veya test etmek için Rust ve Cargo
 
-Frontend: Next.js, React, Tailwind CSS, Axios
+## Kurulum ve çalıştırma
 
-Blockchain Network: Stellar Mainnet / Testnet (Soroban RPC & Horizon)
-
-⚡ Hızlı Başlangıç (Local Setup)
-1. Repository'yi Klonlayın
-Bash
-git clone [https://github.com/Shsha3245/myCoin.git](https://github.com/Shsha3245/myCoin.git)
-cd myCoin
-2. Backend Kurulumu (FastAPI)
-Bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-.env dosyasını backend/ klasörü altında oluşturun:
-
-Kod snippet'i
-DATABASE_URL=postgresql://postgres.xxx:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-STELLAR_RPC_URL=[https://mainnet.stellar.org:443](https://mainnet.stellar.org:443)
-STELLAR_NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
-SPONSOR_PUBLIC_KEY=GDV45VUQ6EYNOHEBIPKRIRKNEV5P6IPPCTN4PMGVE2VUS6RGGSZZTFK4
-STELLAR_CAMPAIGN_CONTRACT_ID=
-Backend'i başlatın:
-
-Bash
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-3. Frontend Kurulumu (Next.js)
-Bash
-cd ../frontend
-npm install
-npm run dev
-Frontend varsayılan olarak http://localhost:3000 (veya http://localhost:3001) adresinde çalışacaktır.
-
-🔒 Güvenlik ve Akıllı Kontrat Yapısı
-PostgreSQL Pooler: IPv4/WSL ağ sınırlarını aşmak ve güvenli bağlantı sağlamak için Supabase Pooler (Port 6543) mimarisi kullanılır.
-
-Transaksiyon Doğrulama: Kampanya desteklerinde ve token transferlerinde Stellar On-Chain doğrulama mekanizmaları ve güvenli exception handling uygulanmaktadır.
-
-RSI/MACD & Analiz Servisleri: Kulüp ve sporcu token'larının piyasa verileri FastAPI üzerinden real-time taranmaktadır.
-
-👥 Katkıda Bulunma & Lisans
-Bu proje Rise In / Stellar Pro Hackathon kapsamında Seçkin Dalgıç tarafından geliştirilmektedir. MIT Lisansı altındadır.
-
-
----
-
-### Step 3: README'yi GitHub'a Gönderme
-
-Dosyayı kaydettikten sonra terminalde:
+### 1. Depoyu alın
 
 ```bash
-git add README.md
-git commit -m "docs: add comprehensive README for FundFlow"
-git push origin main
+git clone https://github.com/Shsha3245/fundFlow.git
+cd fundFlow
+```
+
+### 2. API'yi yapılandırın ve çalıştırın
+
+`backend/.env` dosyasını oluşturup PostgreSQL bağlantı adresinizi ekleyin:
+
+```dotenv
+DATABASE_URL=postgresql://<kullanici>:<sifre>@<sunucu>:5432/<veritabani>
+```
+
+Ardından bağımlılıkları kurup API'yi başlatın:
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+İlk başlatmada uygulama `campaigns` tablosunu oluşturur ve veritabanı boşsa örnek kampanyalar ekler. API belgeleri `http://localhost:8000/docs` adresinde kullanılabilir.
+
+> Windows'ta sanal ortamı etkinleştirmek için `.venv\Scripts\activate` komutunu kullanın.
+
+### 3. Arayüzü çalıştırın
+
+Yeni bir terminalde:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Arayüz `http://localhost:3000` adresinde, API ise `http://localhost:8000` adresinde açılır.
+
+## Geliştirme ve doğrulama
+
+Frontend komutları `frontend/` dizininde çalıştırılır:
+
+```bash
+npm run lint
+npm run build
+npm start
+```
+
+Soroban kontrat çalışma alanının Rust testlerini çalıştırmak için:
+
+```bash
+cd soroban-campaign-contract
+cargo test --workspace
+```
+
+## Kullanım
+
+Ana sayfada kampanyaları görüntüleyip arayabilir, kategoriye göre filtreleyebilir ve proje başvurusu gönderebilirsiniz. Destek işlemleri için MetaMask veya Freighter cüzdanınızı bağlayabilirsiniz. Yönetim paneli `/management-portal-x82` yolundadır; kampanya başvuruları yönetim panelinden incelenir ve onaylanır.
+
+## Katkıda bulunma
+
+Katkılarınızı memnuniyetle karşılıyoruz. Değişiklik öncesinde bir issue açarak önerinizi paylaşın; ardından odaklı bir branch üzerinde çalışıp uygun doğrulamaları çalıştırarak pull request gönderin.

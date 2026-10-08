@@ -1,0 +1,30 @@
+name: Production Deployment Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/mycoin
+            git pull origin main
+            
+            # Zero-Downtime Rebuild & Reload
+            docker compose build --parallel
+            docker compose up -d --no-deps --scale backend=2 --no-recreate backend
+            docker compose up -d --no-deps backend
+            docker compose up -d --no-deps frontend
+            docker system prune -f

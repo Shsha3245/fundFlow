@@ -61,7 +61,7 @@ Transaksiyon Doğrulama: Kampanya desteklerinde ve token transferlerinde Stellar
 RSI/MACD & Analiz Servisleri: Kulüp ve sporcu token'larının piyasa verileri FastAPI üzerinden real-time taranmaktadır.
 
 👥 Katkıda Bulunma & Lisans
-Bu proje Rise In / Stellar Pro Hackathon kapsamında Seçkin Dalgıç tarafından geliştirilmektedir. MIT Lisansı altındadır.
+Bu proje Seçkin Dalgıç tarafından geliştirilmektedir. MIT Lisansı altındadır.
 
 
 ---
